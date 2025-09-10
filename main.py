@@ -8,14 +8,14 @@ client = OpenAI(api_key=KEY)
 def encode_image(image: bytes):
     return base64.b64encode(image).decode("utf-8")
 
-def generate_recipe_from_img(image: bytes, type: str | None) -> str:
+def generate_recipe_from_img(image: bytes, type: str | None = None) -> str:
     base64_image = encode_image(image)
     response = client.chat.completions.create(
         model=MODEL,
         messages=[
-            {"role": "system", "content": f"You are an experienced cook chief that responds in Markdown in russian language. You tell nothing but only recipes. Help me cook dish using ingredients from fridge from provided image! At the end include nutrition information about 100g of final product." + (f"Recipe will be for {type} dish" or "")},
+            {"role": "system", "content": f"You are an experienced skin care expert that only answers in Markdown format. Analyze given picture and give your diagnosis for this skin care problem, if you cant see any then just give skin care tips to keep it up. if you can diagnose any problems, give advice on how to heal that. Of course we will consult specialist anyways."},
             {"role": "user", "content": [
-                {"type": "text", "text": "What can be cooked with these ingredients from fridge on provided image below?"},
+                {"type": "text", "text": "What can be done with this type of skin? Do you see any issues over there?"},
                 {"type": "image_url", "image_url": {
                     "url": f"data:image/png;base64,{base64_image}"}
                 }

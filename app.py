@@ -84,17 +84,16 @@ async def get_user(token: str, session: Session = Depends(get_session)):
 
 
 @app.post('/generate', response_model=RecipeResponse, status_code=200, dependencies=[Depends(api_key_auth)])
-async def generate_recipe(
+async def generate_recommendation(
     response: Response, 
     file: UploadFile, 
-    type: RecipeType = None,  # type: ignore
     user: User = Depends(get_user),
     session: Session = Depends(get_session),
 ): 
-    """Сгенерировать рецепт по фото и выбранному типу блюда."""
+    """Сгенерировать рекомендацию по уходу за кожей по фото."""
     try:
         content = await file.read()
-        rec_md = generate_recipe_from_img(content, type)
+        rec_md = generate_recipe_from_img(content, type=None)
         uploaded = MinioClient.save(content, file.filename)
         if uploaded:
             recipe = Recipe(
